@@ -41,7 +41,7 @@ class LLMClient:
             api_key = require_env("GEMINI_API_KEY")
             self._gemini = genai.Client(api_key=api_key)
 
-    @retry(stop=stop_after_attempt(3), wait=wait_exponential_jitter(initial=1, max=6))
+    #@retry(stop=stop_after_attempt(3), wait=wait_exponential_jitter(initial=1, max=6))
     def generate(self, messages: List[ChatMessage], max_tokens: int = 600) -> LLMResponse:
         if self.config.provider == 'openai':
             return self._generate_openai(messages=messages, max_tokens=max_tokens)
@@ -134,10 +134,11 @@ class LLMClient:
             config={
                 "temperature": self.config.temperature,
                 "max_output_tokens": max_tokens,
+                "response_mime_type": "application/json",
             },
         )
 
-        text = getattr(resp, "text", "") or ""
+        text = (getattr(resp, "text", "") or "").strip()
 
         # Token usage is available in some responses, but not always surfaced consistently.
         # Keep nullable to stay provider-agnostic.

@@ -12,6 +12,9 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from shared.llm_client import LLMClient, ChatMessage
+from shared.prompts.v1.contract_summary_prompt import SYSTEM_PROMPT, USER_TEMPLATE
+from shared.utils.json_utils import safe_parse_json
+
 
 st.set_page_config(page_title="LLM Smoke Test", layout="centered")
 
@@ -19,12 +22,12 @@ st.title("LLM Smoke Test")
 st.caption('Quick health-check for Gemini/OpenAI/Claude + unified client wrapper')
 
 provider = st.selectbox('Provider', ['gemini', 'openai', 'anthropic'], index=0)
-model = st.text_input('Model', value=os.getenv('LLM_MODEL', 'gemini-2.0-flash'))
+model = st.text_input('Model', value=os.getenv('LLM_MODEL', 'gemini-2.5-flash'))
 temperature = st.slider('Temperature', 0.0, 1.0, float(os.getenv('LLM_TEMPERATURE', '0.2')), 0.05)
 
 prompt = st.text_area(
     'Prompt',
-    value="Explain AI to me like I'm a 5-year old",
+    value='',
     height=120
 )
 
@@ -34,16 +37,27 @@ if st.button('Generate'):
     os.environ['LLM_TEMPERATURE'] = str(temperature)
 
     client = LLMClient()
+
     messages=[
-        ChatMessage(role='system', content='You are a concise, helpful assistent'),
-        ChatMessage(role='user', content=prompt)
+        ChatMessage(role='system', content=SYSTEM_PROMPT),
+        ChatMessage(
+            role='user', 
+            content=USER_TEMPLATE.substitute(contract_text=prompt)
+        )
     ]
 
     with st.spinner('Caling the model...'):
-        resp = client.generate(messages, max_tokens=400)
+        resp = client.generate(messages, max_tokens=1500)
+        parsed_json, error = safe_parse_json(resp.text)
 
-    st.subheader('Output')
-    st.write(resp.text)
+    st.subheader("Raw Output")
+    st.code(resp.text)
+
+    if error:
+        st.error(f"JSON parsing error: {error}")
+    else:
+        st.subheader('Parsed JSON')
+        st.json(parsed_json)
 
     st.subheader('Metadata')
     st.json(
