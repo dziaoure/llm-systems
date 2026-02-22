@@ -104,7 +104,7 @@ This prevents common LLM failure modes such as:
 ## Local Setup
 ```
 git clone <repo-url>
-cd contract-analyzer
+cd llm-systems
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
@@ -119,7 +119,7 @@ cp .env.example .env
 Next, add you `GEMINI_API_KEY` to the `.env` file.
 
 ```
-GEMINI_API_KEY=your_api_key_here
+GEMINI_API_KEY='your_api_key_here'
 ```
 
 ### Run:
