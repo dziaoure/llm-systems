@@ -77,6 +77,7 @@ class LLMClient:
 
     def _generate_anthropic(self, messages: List[ChatMessage], max_tokens: int) -> LLMResponse:
         assert self._anthropic is not None
+
         # Anthropic supports a top-level system string + user/assistant messages
         system_parts = [m.content for m in messages if m.role == 'system']
         system_text = '\n\n'.join(system_parts).strip() if system_parts else None
@@ -112,7 +113,6 @@ class LLMClient:
         assert self._gemini is not None
 
         # Convert our chat messages into a single prompt string.
-        # (Simple + reliable for Day 1; we’ll improve this later for richer turns.)
         system_parts = [m.content for m in messages if m.role == "system"]
         system_text = "\n\n".join(system_parts).strip()
 
@@ -129,15 +129,16 @@ class LLMClient:
         resp = self._gemini.models.generate_content(
             model=self.config.model,
             contents=prompt,
+            
             # The SDK supports generation config; keep it minimal for now.
-            # We'll add safety + richer configs later.
             config={
                 "temperature": self.config.temperature,
                 "max_output_tokens": max_tokens,
+                "response_mime_type": "application/json",
             },
         )
 
-        text = getattr(resp, "text", "") or ""
+        text = (getattr(resp, "text", "") or "").strip()
 
         # Token usage is available in some responses, but not always surfaced consistently.
         # Keep nullable to stay provider-agnostic.

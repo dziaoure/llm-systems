@@ -1,0 +1,261 @@
+/* Global layout */
+.main,
+[data-testid="stAppViewContainer"] {
+    background: #222;
+}
+
+section[data-testid="stSidebar"]>div {
+    background: #05010b;
+    border-right: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* Typography */
+[data-testid="stAppViewContainer"] h1,
+[data-testid="stAppViewContainer"] h2,
+[data-testid="stAppViewContainer"] h3 {
+    font-family: "helvetica neue", helvetica, arial, sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: #fff;
+}
+
+[data-testid="stAppViewContainer"] h1 {
+    font-size: 3rem;
+    letter-spacing: -0.01em;
+    margin: 0;
+    padding: 0 0 20px;
+    text-align: center;
+}
+
+[data-testid="stAppViewContainer"] h2 {
+    margin-top: 1.5rem;
+}
+
+[data-testid="stAppViewContainer"] h3 {
+    margin-top: 1.5rem;
+    font-size: 2rem;
+}
+
+[data-testid="stAppViewContainer"] p {
+    font-family: "helvetica neue", helvetica, arial, sans-serif;
+    color: #fff;
+    font-size: 17px;
+}
+
+/* Small "AI glow" accent for subtitles */
+[data-testid="stMarkdown"] p:first-child {
+    color: #fff;
+}
+
+/* Buttons */
+[data-testid="stFormSubmitButton"] {
+    padding: 20px 0;
+    text-align: center;
+}
+
+[data-testid="stBaseButton-secondaryFormSubmit"] {
+    background: linear-gradient(135deg, #eb5f38, #d54282);
+    color: #0b0b12;
+    border-radius: 999px;
+    padding: 0.5rem 2rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    border: 1px solid transparent;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.04),
+        0 14px 34px rgba(0, 0, 0, 0.7);
+    cursor: pointer;
+    transition: transform 0.12s ease-out, border 0.15s ease-out, box-shadow 0.12s ease-out, filter 0.15s ease-out;
+}
+
+[data-testid="stBaseButton-secondaryFormSubmit"]:hover {
+    border: 1px solid rgba(255, 255, 255, 0.85);
+}
+
+[data-testid="stBaseButton-secondaryFormSubmit"] p {
+    font-size: 19px;
+}
+
+.stButton>button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.85);
+    filter: brightness(1.08);
+}
+
+.stButton>button:active {
+    transform: translateY(0);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.7);
+}
+
+/* Inputs (number/text/select) */
+.stNumberInput>div>input,
+.stTextInput>div>input,
+.stSelectbox>div>div {
+    background-color: #11111a !important;
+    border-radius: 10px !important;
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+    color: #f5f5f7 !important;
+}
+
+.stNumberInput label,
+.stTextInput label,
+.stSelectbox label {
+    color: #e5e5f0 !important;
+    font-size: 0.9rem;
+}
+
+
+/* Horizontal rule */
+hr {
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    margin: 1.5rem 0;
+}
+
+/* Links */
+a {
+    color: #64d2ff;
+}
+
+a:hover {
+    color: #a0e4ff;
+}
+
+/** File Uploader */
+[data-testid="stFileUploaderDropzone"] {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+    padding: 40px 40px 50px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+
+    [data-testid="stBaseButton-secondary"] {
+        margin-top: 20px;
+        padding: 8px 20px;
+        transition: all 0.2s ease-out;
+        border: 1px solid rgba(235, 95, 56, 0.85);
+        color: rgba(235, 95, 56, 0.85);
+
+        &:hover {
+            border-color: rgba(235, 95, 56, 1.0);
+            color: rgba(235, 95, 56, 1.0);
+        }
+    }
+}
+
+[data-testid="stFileUploaderDropzoneInstructions"] {
+    flex-direction: column;
+    margin: auto;
+    padding-bottom: 20px;
+
+    svg {
+        width: 80px;
+        height: auto;
+        margin-bottom: 12px;
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+    span, small {
+        font-family: "helvetica neue", helvetica, arial, sans-serif;
+    }
+}
+
+[data-testid="stFileUploaderFile"] {
+    padding: 12px 30px;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.5);
+
+    & > div > svg {
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+    div, small {
+        font-family: "helvetica neue", helvetica, arial, sans-serif;
+    }
+}
+
+.stButton {
+    text-align: center;
+
+    [data-testid="stBaseButton-secondary"] {
+        background: linear-gradient(135deg, #eb5f38, #d54282);
+        color: #0b0b12;
+        min-width: 220px;
+        border-radius: 12px;
+        padding: 0.5rem 2rem;
+        margin-bottom: 8px;
+        font-weight: 700;
+        letter-spacing: 0.03em;
+        border: 1px solid transparent;
+        box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.04),
+            0 14px 34px rgba(0, 0, 0, 0.7);
+        cursor: pointer;
+        transition: transform 0.12s ease-out, border 0.15s ease-out, box-shadow 0.12s ease-out, filter 0.15s ease-out;
+
+        & > div > p {
+            font-size: 19px;
+            font-weight: 500;
+        }
+
+        &[disabled] {
+            opacity: 0.75;
+
+            &:hover {
+                transform: none;
+                opacity: 0.75 !important;
+            }
+
+            & > div > p {
+                opacity: 0.75;
+            }
+        }
+    }
+
+}
+
+div.stSpinner {
+    width: 100%;
+    color: rgba(255, 255, 255, 0.7);
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+
+    & > * {
+        color: rgba(255, 255, 255, 0.7);
+    }
+}
+
+div.stDownloadButton button {
+    margin-top: 20px;
+    padding: 8px 20px;
+    transition: all 0.2s ease-out;
+    border: 1px solid rgba(235, 95, 56, 0.85);
+    color: rgba(235, 95, 56, 0.85);
+    color: #fff;
+
+    p {
+        color: rgba(235, 95, 56, 0.85);
+    }
+
+    &:hover {
+        border-color: rgba(235, 95, 56, 1.0);
+    }
+}
+
+[data-testid="stTextAreaRootElement"] {
+    margin: 20px 0;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+
+    & > * {
+        background: none;
+    }
+
+    textarea {
+        font-family: "helvetica neue", helvetica, arial, sans-serif;
+        font-size: 17px;
+    }
+}
