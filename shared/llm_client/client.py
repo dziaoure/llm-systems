@@ -41,7 +41,7 @@ class LLMClient:
             api_key = require_env("GEMINI_API_KEY")
             self._gemini = genai.Client(api_key=api_key)
 
-    #@retry(stop=stop_after_attempt(3), wait=wait_exponential_jitter(initial=1, max=6))
+    @retry(stop=stop_after_attempt(3), wait=wait_exponential_jitter(initial=1, max=6))
     def generate(self, messages: List[ChatMessage], max_tokens: int = 600) -> LLMResponse:
         if self.config.provider == 'openai':
             return self._generate_openai(messages=messages, max_tokens=max_tokens)
@@ -77,6 +77,7 @@ class LLMClient:
 
     def _generate_anthropic(self, messages: List[ChatMessage], max_tokens: int) -> LLMResponse:
         assert self._anthropic is not None
+
         # Anthropic supports a top-level system string + user/assistant messages
         system_parts = [m.content for m in messages if m.role == 'system']
         system_text = '\n\n'.join(system_parts).strip() if system_parts else None
@@ -112,7 +113,6 @@ class LLMClient:
         assert self._gemini is not None
 
         # Convert our chat messages into a single prompt string.
-        # (Simple + reliable for Day 1; we’ll improve this later for richer turns.)
         system_parts = [m.content for m in messages if m.role == "system"]
         system_text = "\n\n".join(system_parts).strip()
 
@@ -129,8 +129,8 @@ class LLMClient:
         resp = self._gemini.models.generate_content(
             model=self.config.model,
             contents=prompt,
+            
             # The SDK supports generation config; keep it minimal for now.
-            # We'll add safety + richer configs later.
             config={
                 "temperature": self.config.temperature,
                 "max_output_tokens": max_tokens,
