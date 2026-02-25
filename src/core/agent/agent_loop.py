@@ -24,10 +24,10 @@ class AgentLoop:
 
     def run(self, contract_text: str, max_steps: int = 5) -> Dict[str, Any]:
         messages: List[Dict[str, str]] = []
-        tool_specs = self.tools.list_specs
+        tool_specs = self.tools.list_specs()
 
         # System + initial user
-        messages.append({ 'role': 'system', 'content': self.llm.system_prompt[tool_specs]})
+        messages.append({ 'role': 'system', 'content': self.llm.system_prompt(tool_specs)})
         messages.append({ 'role': 'user', 'content': json.dumps({
             'task': 'Ana;yze this contract for key clauses and risks',
             'contract_text': contract_text[:120000] # Cap for safety

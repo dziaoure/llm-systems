@@ -7,7 +7,7 @@ from typing import Any, Dict, Protocol
 class ToolSpec:
     name: str
     description: str
-    input_schems: Dict[str, Any]
+    input_schema: Dict[str, Any]
 
 
 class Tool(Protocol):

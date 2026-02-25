@@ -9,7 +9,7 @@ class RiskHeuristicsTool:
     spec = ToolSpec(
         name='score_risk_heuristics',
         description='Scores basic contract rist heuristics from extracted clauses (deterministric rules).',
-        input_schems={
+        input_schema={
             'type': 'object',
             'properties': {
                 'clauses': { 'type': 'object' }

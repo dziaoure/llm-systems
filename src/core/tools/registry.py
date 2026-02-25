@@ -17,7 +17,7 @@ class ToolRegistry:
             {
                 'name': t.spec.name,
                 'description': t.spec.description,
-                'input_schema': t.spec.Input_schema
+                'input_schema': t.spec.input_schema
             }
             for t in self._tools.values()
         ]
