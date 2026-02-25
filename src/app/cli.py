@@ -3,7 +3,7 @@ import sys, json
 from src.core.tools.registry import ToolRegistry
 from src.adapters.tools.clause_extractor import ClauseExtractorTool
 from src.adapters.tools.risk_heuristics import RiskHeuristicsTool
-from src.adapters.llm.provider import LLMProvider
+from src.adapters.llm.provider import LLMProvider, GeminiChatClient
 from src.core.agent.agent_loop import AgentLoop
 from src.core.agent.tracer import Tracer
 
@@ -26,7 +26,9 @@ def main():
     tools.register(RiskHeuristicsTool())
 
     tracer = Tracer()
-    llm = LLMProvider(client=DummyClient())
+
+    client = GeminiChatClient()
+    llm = LLMProvider(client=client)
     agent = AgentLoop(llm=llm, tools=tools, tracer=tracer)
 
     result = agent.run(contract_text=contract_text)

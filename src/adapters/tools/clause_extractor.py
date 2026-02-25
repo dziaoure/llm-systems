@@ -13,7 +13,7 @@ class ClauseExtractorTool:
             'type': 'object',
             'properties': {
                 'contract_text': { 'type': 'string'},
-                'clauses_types': {
+                'clause_types': {
                     'type': 'array',
                     'items': { 'type': 'string'},
                     'default': [
@@ -33,7 +33,7 @@ class ClauseExtractorTool:
 
     def run(self, args: Dict[str, Any]) -> Dict[str, Any]:
         text = args['contract_text']
-        clause_typees: List[str] = args.get('clause_types') or self.spec.input_schema['properties']['clause_types']['default']
+        clause_types: List[str] = args.get('clause_types') or self.spec.input_schema['properties']['clause_types']['default']
 
         patterns = {
             'termination': r'(termination|term and termination|terminate)\b(.|\n){0,1200}',
@@ -47,7 +47,7 @@ class ClauseExtractorTool:
 
         extracted = {}
 
-        for c in clause_typees:
+        for c in clause_types:
             pat = patterns.get(c)
 
             if not pat:

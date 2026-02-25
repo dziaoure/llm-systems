@@ -18,7 +18,7 @@ class RiskHeuristicsTool:
         }
     )
 
-    def tun(self, args: Dict[str, Any]) -> Dict[str, Any]:
+    def run(self, args: Dict[str, Any]) -> Dict[str, Any]:
         clauses: Dict[str, Any] = args['clauses'] or {}
         score = 0
         flags = []
@@ -29,6 +29,12 @@ class RiskHeuristicsTool:
             score += 30
             flags.append('liability_unlimited_or_uncapped')
 
+        term = (clauses.get('termination') or '').lower()
+
+        if 'for convenience' in term and 'notice' not in term:
+            score += 15
+            flags.append('termination_for_convenience_without_notice')
+
         payment = (clauses.get('payment') or '').lower()
 
         if 'net 60' in payment or 'net 90' in payment:
@@ -37,7 +43,7 @@ class RiskHeuristicsTool:
         
         ip = (clauses.get('ip') or '').lower()
 
-        if 'all work product' in liab ('assign' in ip or 'assignment' in ip):
+        if 'all work product' in ip and ('assign' in ip or 'assignment' in ip):
             score += 10
             flags.append('broad_ip_assignment')
 

@@ -15,6 +15,13 @@ def _safe_json_loads(text: str) -> Dict[str, Any]:
     return json.loads(t)
 
 
+def _normalize_clauses(clauses: Dict) -> Dict:
+    if not clauses:
+        return {}
+    
+    return { k: (v or '') for k,v in clauses.items()}
+
+
 class AgentLoop:
     def __init__(self, llm, tools: ToolRegistry, tracer) -> None:
         self.llm = llm
@@ -41,7 +48,7 @@ class AgentLoop:
             raw = self.llm.chat(messages)
             latency = time.time() - t0
 
-            self.tracer.log_llm(step=step, latency=latency, raw=raw)
+            self.tracer.log_llm(step=step, latency_s=latency, raw=raw)
 
             # PArse JSON and retry if needed
             try:
@@ -71,7 +78,7 @@ class AgentLoop:
                     self.tracer.log_tool(
                         step=step, 
                         tool=name, 
-                        latency=tool_latency,
+                        latency_s=tool_latency,
                         args=args,
                         result=result
                     )
@@ -83,7 +90,7 @@ class AgentLoop:
                     if name == 'score_risk_heuristics':
                         risk_summary = result or risk_summary
 
-                    messages.append({ 'role': 'user', 'content': json.dump({
+                    messages.append({ 'role': 'user', 'content': json.dumps({
                         'tool': name,
                         'result': result
                     })})
@@ -92,8 +99,8 @@ class AgentLoop:
 
             if status == 'final':
                 # Merge stashed results if model omitted them
-                obj.setdefault('extracted_clauses', extracted_clauses)
-                obj.setdefault('risk_summary', risk_summary)
+                obj['extracted_clauses'] = _normalize_clauses(extracted_clauses or obj.get('extracted_clauses') or {})
+                obj['risk_summary'] = risk_summary or obj.get('risk_summary') or {}
                 return obj
         
             # Unknown status => treat as error
