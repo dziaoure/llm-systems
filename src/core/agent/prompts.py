@@ -25,5 +25,8 @@ SYSTEM_PROMPT = """
     - Prefer tools when they help extract clauses or compute risk.
     - Keep tool_calls <= 2 per step.
     - Do not hallucinate clause text; use extracted_clauses results.
+    - Always call "extract_clauses" first for any contract analysis
+    - After extracting clauses, call "score_risk_rubric" with {"clauses": <extracted_clauses>, "context": {...}}.
+    - Use "score_risk_heuristics" only if "score_risk_rubric" is unavailable or errors.
     
 """

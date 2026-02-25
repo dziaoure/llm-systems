@@ -1,18 +1,43 @@
 from __future__ import annotations
 import json
+import re
 import time
 from typing import Any, Dict, List, Tuple
 from src.core.tools.registry import ToolRegistry
 
 
 def _safe_json_loads(text: str) -> Dict[str, Any]:
-    # Best-effort: strip code fences if any apper
+    """
+    Robust JSON extraction:
+    - Strips ```json fences
+    - Extracts first valid JSON object
+    - Handles leading/trailing prose
+    """
+
+    if not text or not text.strip():
+        raise ValueError("Empty model response.")
+
     t = text.strip()
 
-    if t.startswith('```'):
-        t = t.strip('`')
+    # Remove fenced blocks like ```json ... ```
+    if t.startswith("```"):
+        t = re.sub(r"^```(?:json)?\s*", "", t, flags=re.IGNORECASE)
+        t = re.sub(r"\s*```$", "", t)
 
-    return json.loads(t)
+    # Try direct parse first
+    try:
+        return json.loads(t)
+    except json.JSONDecodeError:
+        pass
+
+    # Extract first {...} block
+    match = re.search(r"\{.*\}", t, flags=re.DOTALL)
+    if not match:
+        raise ValueError("No JSON object found in model output.")
+
+    candidate = match.group(0)
+
+    return json.loads(candidate)
 
 
 def _normalize_clauses(clauses: Dict) -> Dict:
@@ -88,6 +113,9 @@ class AgentLoop:
                         extracted_clauses = result.get('clauses') or extracted_clauses
 
                     if name == 'score_risk_heuristics':
+                        risk_summary = result or risk_summary
+
+                    if name == 'score_risk_rubric':
                         risk_summary = result or risk_summary
 
                     messages.append({ 'role': 'user', 'content': json.dumps({

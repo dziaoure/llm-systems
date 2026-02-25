@@ -4,6 +4,7 @@ from src.core.tools.registry import ToolRegistry
 from src.adapters.tools.clause_extractor import ClauseExtractorTool
 from src.adapters.tools.risk_heuristics import RiskHeuristicsTool
 from src.adapters.llm.provider import LLMProvider, GeminiChatClient
+from src.adapters.tools.risk_rubric_gemini import RiskRubricGeminiTool
 from src.core.agent.agent_loop import AgentLoop
 from src.core.agent.tracer import Tracer
 
@@ -24,6 +25,9 @@ def main():
     tools = ToolRegistry()
     tools.register(ClauseExtractorTool())
     tools.register(RiskHeuristicsTool())
+
+    gemini_risk_rubric = RiskRubricGeminiTool()
+    tools.register(gemini_risk_rubric)
 
     tracer = Tracer()
 
