@@ -7,6 +7,23 @@ import time
 
 from src.app.analyze import analyze_text
 
+# ------------------------------------------------------------------------
+#
+#   To start the server:
+#   uvicorn src.app.server:app --reload --host 0.0.0.0 --port 8000
+#
+#   Sample curl request
+#   curl -X POST http://localhost:8000/analyze \
+#   -H "Content-Type: application/json" \
+#   -d '{
+#        "contract_text": "Limitation of Liability: Vendor shall have unlimited liability. This Agreement may be terminated for convenience without notice.",
+#        "context": {
+#          "party_role": "vendor",
+#          "jurisdiction": "California, USA",
+#          "contract_type": "Software Services Agreement"
+#        }
+#      }'
+# ------------------------------------------------------------------------
 
 app = FastAPI(
     title='Contract Analyzer API',
@@ -48,3 +65,4 @@ async def log_request(request: Request, call_next):
     print(f'{request.method} {request.url.path} - {duration:0.3f}s')
 
     return response
+
