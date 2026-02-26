@@ -2,27 +2,31 @@
 
 ![App Screenshot](../images/contract-analyzer-screenshot.jpg)
 
-An LLM-powered structured contract analysis system for PDF and text inputs.
-
-Extracts key parties, effective dates, termination clauses, risk flags, and confidence scores using a production-style LLM pipeline with guardrails and fallback strategies.
 
 ---
 
 ## Overview
 
-This project demonstrates a real-world LLM system design for structured information extraction from legal contracts.
+Contract Analyzer is a production-style LLM system that analyzes contract text using a tool-driven workflow:
+**clause extraction → rubric-based risk scoring → structured recommendations.**
 
-It supports:
-- PDF ingestion with text extraction
-- Text-mode input
-- Single-pass structured extraction for short documents
-- Map-Reduce summarization for longer contracts
-- Schema validation and structured JSON output
+It ships with two entrypoints:
+- **Streamlit UI**: (PDF/text extraction + interactive review)
+- **FastAPI service**: (POST /analyze for integration)
+
+
+## Features:
+- Single-pass and Map-Reduce processing
+- Adaptive fallback logic
+- Structured JSON extraction
 - Risk flag detection with severity scoring
-- Graceful fallback logic
-- Downloadable sample contracts for demo
-
-The system is designed to be reliable, extensible, and production-ready.
+- Production-ready UI
+- Gemini-powered agent loop with multi-step orchestration
+- Tooling layer (clause extraction + risk rubric scorer)
+- Rubric-based risk scoring with rationale, assumptions, and recommended edits
+- Strict JSON output with robust parsing + retry safeguards
+- FastAPI service (POST /analyze, GET /health) + Swagger docs
+- CLI interface for local testing and batch workflows
 
 
 ## System Architecture
@@ -122,9 +126,28 @@ Next, add you `GEMINI_API_KEY` to the `.env` file.
 GEMINI_API_KEY='your_api_key_here'
 ```
 
-### Run:
-Run the following command from the `llm-systems` root folder
+## Run It
+### Streamlit (UI)
+Run the following command from the `llm-systems` root folder:
+
 ```
 streamlit run projects/contract_analyzer/app/main.py
+```
+
+### FastAPI (API)
+First, start the server:
+
+```
+uvicorn src.app.server:app --reload --host 0.0.0.0 --port 8000
+```
+
+Next, make an API request:
+```
+curl -X POST http://localhost:8000/analyze \
+  -H "Content-Type: application/json" \
+  -d '{
+    "contract_text": "Limitation of Liability: Vendor shall have unlimited liability. This Agreement may be terminated for convenience without notice.",
+    "context": {"party_role":"vendor","jurisdiction":"California, USA","contract_type":"Software Services Agreement"}
+  }'
 ```
 
