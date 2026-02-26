@@ -1,0 +1,14 @@
+[
+  {
+    "id": "termination_notice",
+    "contract_text": "This Agreement may be terminated for convenience by either party at any time.",
+    "must_include": ["termination"],
+    "expect_risk_level": "medium"
+  },
+  {
+    "id": "liability_unlimited",
+    "contract_text": "Limitation of Liability: The Vendor shall have unlimited liability for any damages.",
+    "must_include": ["liability"],
+    "expect_risk_level": "high"
+  }
+]
