@@ -28,3 +28,4 @@ class QueryTrace(BaseModel):
     latency_ms: float = Field(default=0.0, ge=0.0)
     prompt_version: str = 'v1'
     metadata: dict[str, Any] = Field(default_factory=dict)
+    
