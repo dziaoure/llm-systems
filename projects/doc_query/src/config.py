@@ -26,6 +26,8 @@ class PathSettings(BaseModel):
     index_dir: Path = INDEX_DIR
     logs_dir: Path = LOGS_DIR
     eval_dir: Path = EVAL_DIR
+    faiss_index_path: Path = INDEX_DIR / 'faiss.index'
+    index_metadata_path: Path = INDEX_DIR / 'index_metadata.json'
 
 
 class ChunkingSettings(BaseModel):
@@ -54,6 +56,7 @@ class RetrievalSettings(BaseModel):
 class ModelSettings(BaseModel):
     generation_model: str = 'gemini-2.5-flash'
     embedding_model: str = 'models/text-embeddings-004'
+    embedding_dimension: int = 768
     api_key_env_var: str = 'GEMINI_API_KEY'
 
 
