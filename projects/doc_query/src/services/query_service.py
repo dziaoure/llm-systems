@@ -1,11 +1,18 @@
+from __future__ import annotations
+
+from src.generation.answerer import Answerer
+from src.generation.citation_builder import build_citations
+from src.models.query import QueryTrace
 from src.models.citation import CitationRecord
 from src.retrieval.retriever import Retriever
 from src.schemas.query import QueryRequest, QueryResponse
+from src.utils.ids import make_request_id
 
 
 class QueryService:
     def __init__(self) -> None:
         self.retriever = Retriever()
+        self.answerer = Answerer()
 
 
     def query(self, request: QueryRequest) -> QueryResponse:
@@ -15,30 +22,36 @@ class QueryService:
             min_score=request.min_score
         )
 
-        citations = [
-            CitationRecord(
-                chunk_id=chunk.chunk_id,
-                filename=chunk.filename,
-                page_number=chunk.page_number,
-                section_title=chunk.section_title,
-                snippet=chunk.text[:300],
-                rank=chunk.rank
-            )
-            for chunk in retrieved_chunks
-        ]
+        answer_record, used_chunk_ranks = self.answerer.answer(
+            question=request.question,
+            retrieved_chunks=retrieved_chunks
+        )
 
-        answer = (
-            'Retrieval completed successsfully. Genertion will be added later.'
-            if retrieved_chunks
-            else 'No sufficiently relevant supporting chunks were found.'
+        citations = build_citations(
+            retrieved_chunks=retrieved_chunks,
+            used_chunk_ranks=used_chunk_ranks
+        )
+
+        answer_record.cirations = citations
+
+        _trace = QueryTrace(
+            request_id=make_request_id(),
+            question=request.question,
+            retrieved_chunk_ids=[chunk.chunk_id for chunk in retrieved_chunks],
+            retrieval_scores=[chunk.score for chunk in retrieved_chunks],
+            grounded=answer_record.grounded,
+            citations=citations,
+            latency_ms=answer_record.latency_ms,
+            prompt_version='v1',
+            metadata={'used_chunk_ranks': used_chunk_ranks}
         )
 
         return QueryResponse(
-            question=request.question,
-            answer=answer,
-            grounded=bool(retrieved_chunks),
+            question=answer_record.question,
+            answer=answer_record.answer,
+            grounded=answer_record.grounded,
             citations=citations,
-            reason_if_unanswered=None if retrieved_chunks else 'insufficient_evidence',
+            reason_if_unanswered=answer_record.reason_if_unanswered,
             retrieved_chunks=retrieved_chunks if request.return_snippets else [],
-            latency_ms=0.0
+            latency_ms=answer_record.latency_ms
         )
