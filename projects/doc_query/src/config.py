@@ -42,13 +42,14 @@ class ChunkingSettings(BaseModel):
         return self
     
 class RetrievalSettings(BaseModel):
-    default_top_k: int = Field(default=5, ge=1)
+    default_initial_top_k: int = Field(default=10, ge=1)
+    default_final_top_k: int = Field(default=4, ge=1)
     max_top_k: int = Field(default=10, ge=1)
     min_similarity_threshold: float = Field(default=0.25, ge=0.0, le=1.0)
 
     @model_validator(mode='after')
     def validate_retrieval(self) -> 'RetrievalSettings':
-        if self.default_top_k > self.max_top_k:
+        if self.default_initial_top_k > self.max_top_k:
             raise ValueError('`default_top_k` cannt be greater than `max_top_k`')
         
         return self

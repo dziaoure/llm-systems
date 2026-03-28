@@ -47,10 +47,7 @@ def validate_generation_payload(payload: dict[str, Any]) -> dict[str, Any]:
     
     if not isinstance(payload['used_chunk_ranks'], list):
         raise ValueError('Field "used_chunk_ranls must be a list')
-    
-    if not all(isinstance(rank, int) for rank in payload['used_chunk_ranks']):
-        raise ValueError('All used_chunk_ranks must be integers')
-    
+        
     reason = payload['reason_if_unanswered']
 
     if reason is not None and not isinstance(reason, str):

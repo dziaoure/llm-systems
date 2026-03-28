@@ -11,7 +11,7 @@ def format_context(chunks: list[RetrievedChunk]) -> str:
 
     for chunk in chunks:
         header = (
-            f'[Chunk {chunk.rank}] '
+            f'[Chunk {chunk.chunk_id}] '
             f'Source={chunk.filename}'
             f', Page={chunk.page_number if chunk.page_number is not None else "N/A"}'
         )
@@ -36,7 +36,7 @@ def build_grounded_prompt(question: str, chunks: list[RetrievedChunk]) -> str:
     {{
         "answer": "string",
         "grounded": true or false,
-        "used_chuk=nk_ranks": [integer, ...],
+        "used_chunk_ranks": [integer, ...],
         "reason_if_unanswered": "string or null"
     }}
 

@@ -69,7 +69,11 @@ def build_chunk_records(
                     token_count=None,
                     start_char=page_chunk['start_char'],
                     end_char=page_chunk['end_char'],
-                    metadata={}
+                    metadata={
+                        'chunk_index': chunk_index,
+                        'page': page_number,
+                        'doc_id': document_id
+                    }
                 )
             )
             chunk_index += 1

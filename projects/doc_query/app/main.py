@@ -11,6 +11,12 @@ from src.services.ingest_service import IngestService
 from src.services.query_service import QueryService
 
 
+# ----------------------------------------------------------
+#  To run the server
+#
+#  uvicorn app.min:app --reload
+# ----------------------------------------------------------
+
 settings = get_settings()
 logger = get_logger('docquery.api')
 

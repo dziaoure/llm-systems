@@ -23,15 +23,14 @@ class QueryService:
 
         retrieved_chunks = self.retriever.retrieve(
             question=request.question,
-            top_k=request.top_k,
-            min_score=request.min_score
+            top_k=request.top_k
         )
-
+        
         answer_record, used_chunk_ranks = self.answerer.answer(
             question=request.question,
             retrieved_chunks=retrieved_chunks
         )
-
+        
         citations = build_citations(
             retrieved_chunks=retrieved_chunks,
             used_chunk_ranks=used_chunk_ranks

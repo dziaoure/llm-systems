@@ -7,4 +7,4 @@ class CitationRecord(BaseModel):
     page_number: int | None = None
     section_title: str | None = None
     snippet: str = Field(min_length=1)
-    rank: int = Field(ge=1)
+    rank: int = Field(ge=0)
