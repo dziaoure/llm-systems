@@ -9,9 +9,9 @@ class QueryRequest(BaseModel):
     min_score: float | None = Field(default=None, ge=0.0, le=1.0)
     return_snippets: bool = True
 
-    @field_validator('queation')
+    @field_validator('question')
     @classmethod
-    def validate_quetion(cls, value: str) -> str:
+    def validate_question(cls, value: str) -> str:
         cleaned = value.strip()
 
         if not cleaned:

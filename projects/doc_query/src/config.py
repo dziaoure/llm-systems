@@ -55,8 +55,8 @@ class RetrievalSettings(BaseModel):
     
 class ModelSettings(BaseModel):
     generation_model: str = 'gemini-2.5-flash'
-    embedding_model: str = 'models/text-embeddings-004'
-    embedding_dimension: int = 768
+    embedding_model: str = 'gemini-embedding-001'
+    embedding_dimension: int = 3072
     api_key_env_var: str = 'GEMINI_API_KEY'
 
 

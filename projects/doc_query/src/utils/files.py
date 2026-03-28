@@ -14,7 +14,10 @@ def load_all_processed_chunks() -> list[ChunkRecord]:
     
     chunks: list[ChunkRecord] = []
 
-    for path in processed_dir.glob('doc_*.json'):
+    for path in processed_dir.glob('*.json'):
+        if path.name == "catalog.json":
+            continue
+         
         payload = json.loads(path.read_text(encoding='utf-8'))
 
         for chunk_data in payload.get('chunks', []):

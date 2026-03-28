@@ -59,3 +59,9 @@ def upsert_document_record(document: DocumentRecord, processed_path: str) -> Non
 
     catalog['documents'] = documents
     save_catalog(catalog)
+
+
+def list_document_entries() -> list[dict]:
+    catalog = load_catalog()
+    return catalog.get('documents', [])
+

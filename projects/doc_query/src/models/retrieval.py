@@ -5,7 +5,7 @@ class RetrievedChunk(BaseModel):
     chunk_id: str
     document_id: str
     filename: str
-    tet: str = Field(min_length=1)
+    text: str = Field(min_length=1)
     score: float
     rank: int = Field(ge=1)
     page_number: int | None = None
