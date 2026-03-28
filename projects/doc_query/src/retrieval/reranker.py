@@ -136,3 +136,36 @@ def rerank_chunks(query: str, chunks: List[RetrievedChunk]) -> List[RerankerChun
 
     reranked.sort(key=lambda c: c.final_score, reverse=True)
     return reranked
+
+
+def expand_with_neighbors(
+    selected_chunks: list[RerankerChunk], 
+    all_chunks: list[RerankerChunk], 
+    window=1
+) -> list[RerankerChunk]:
+    expanded = {}
+
+    # Build lookup by chunk index
+    by_doc = {}
+
+    for chunk in all_chunks:
+        doc_id = chunk.metadata.get('doc_id')
+        by_doc.setdefault(doc_id, {})[chunk.metadata.get('chunk_index')] = chunk
+
+    for chunk in selected_chunks:
+        doc_id = chunk.metadata.get('doc_id')
+        idx = chunk.metadata.get('chunk_index')
+
+        for offset in range(-window, window + 1):
+            neighbor_idx = idx + offset
+            neighbor = by_doc.get(doc_id, {}).get(neighbor_idx)
+
+            if neighbor:
+                expanded[(doc_id, neighbor_idx)] = neighbor
+
+    result: list[RerankerChunk] = []
+
+    for chunk in expanded.values():
+        result.append(chunk)
+
+    return result

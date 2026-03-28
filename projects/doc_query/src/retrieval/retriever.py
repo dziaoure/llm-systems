@@ -4,7 +4,7 @@ from src.config import get_settings
 from src.models.retrieval import RetrievedChunk
 from src.retrieval.embeddings import EmbeddingClient
 from src.retrieval.vector_store import FaissVectorStore
-from src.retrieval.reranker import RerankerChunk, rerank_chunks
+from src.retrieval.reranker import RerankerChunk, rerank_chunks, expand_with_neighbors
 
 
 class Retriever:
@@ -67,9 +67,12 @@ class Retriever:
         final_top_k = self.settings.retrieval.default_final_top_k
         selected: list[RerankerChunk] = reranked[:final_top_k]
 
+        # Expand the selection to include neighbors
+        expanded_selection: list[RerankerChunk] = expand_with_neighbors(selected, reranked)
+
         # Step 6: Reorder by document order
-        selected = sorted(
-            selected,
+        expanded_selection = sorted(
+            expanded_selection,
             key=lambda c: (
                 c.metadata.get('page') if c.metadata.get('page') is not None else 0,
                 c.metadata.get('chunk_index', 0)
@@ -78,7 +81,7 @@ class Retriever:
 
         top_chunks: list[RetrievedChunk] = []
 
-        for i, chunk in enumerate(selected, start=1):
+        for i, chunk in enumerate(expanded_selection, start=1):
             top_chunks.append(
                 RetrievedChunk(
                     chunk_id=chunk.chunk_id,
