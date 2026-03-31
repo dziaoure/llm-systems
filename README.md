@@ -8,7 +8,7 @@ This repository demonstrates practical large language model engineering beyond p
 Projects are located in the `projects` folder. 
 
 
-### 1. Contract Analyzer
+## Project 1: Contract Analyzer
 Project folder: `projects/contract_analyzer`
 
 ![App Screenshot](projects/images/contract-analyzer-screenshot.jpg)
@@ -22,7 +22,7 @@ It ships with two entrypoints:
 - **FastAPI service**: (POST /analyze for integration)
 
 
-## Features:
+### Features:
 - Single-pass and Map-Reduce processing
 - Adaptive fallback logic
 - Structured JSON extraction
@@ -36,7 +36,7 @@ It ships with two entrypoints:
 - CLI interface for local testing and batch workflows
 
 
-## Design Philosophy
+### Design Philosophy
 
 These projects emphasize:
 - Reliability over novelty
@@ -48,22 +48,22 @@ These projects emphasize:
 Each system is built to reflect how LLM-powered applications should behave in production environments.
 
 
-## Flow
+### Flow
 
 - **Input**: PDF or raw text
 - **Extraction** (Streamlit): PDF → text
 - **Analysis core**: agent loop (tools → rubric → JSON)
 - **Output**: structured JSON (+ UI rendering)
 
-## Run It
-### Streamlit (UI)
+### Run It
+#### Streamlit (UI)
 Run the following command from the `llm-systems` root folder:
 
 ```
 streamlit run projects/contract_analyzer/app/main.py
 ```
 
-### FastAPI (API)
+#### FastAPI (API)
 First, start the server:
 
 ```
@@ -81,7 +81,7 @@ curl -X POST http://localhost:8000/analyze \
 ```
 
 
-## Core Capabilities Demonstrated
+### Core Capabilities Demonstrated
 
 Prompt engineering for structured extraction
 - Map-Reduce document processing
@@ -92,16 +92,123 @@ Prompt engineering for structured extraction
 - UX considerations for AI applications
 
 
-## Tech Stack
+### Tech Stack
 - Python
 - Streamlit
 - Gemini API (provider-agnostic architecture)
 - pypdf
 - Environment-based configuration
 
-## Purpose
+### Purpose
 
 This repository serves as:
 - A demonstration of applied LLM systems engineering
 - A portfolio of deployable AI-backed applications
 - A foundation for contract and enterprise AI work
+
+---
+
+## Project 2: DocQuery
+Project folder: `projects/doc_query`
+
+![App Screenshot](projects/doc_query/images/doc-query-screenshot.jpg)
+
+
+DocQuery is a production-style Retrieval-Augmented Generation (RAG) system that allows users to upload documents, ask questions, and receive grounded answers with citations.
+
+The system ingests documents, converts them into embeddings, retrieves relevant chunks using semantic search, reranks them for relevance, and generates answers using a large language model.
+
+
+### Features:
+- Document ingestion (PDF, TXT, Markdown)
+- Automatic text extraction
+- Document chunking with overlap
+- Embedding generation
+- FAISS vector search
+- Top-K retrieval
+- Semantic reranking
+- Grounded answer generation
+- Citations with page numbers and snippets
+- Streamlit user interface
+- FastAPI backend
+- Request logging and latency tracking
+
+
+### How It Works
+
+#### Step 1 — Ingestion
+
+Documents are uploaded and processed:
+- Text is extracted from PDF/TXT/MD files
+- Text is split into chunks with overlap
+- Each chunk is converted into an embedding
+- Embeddings are stored in a FAISS index
+- Metadata is stored for citations
+
+#### Step 2 — Retrieval
+
+When a user asks a question:
+- The question is converted into an embedding
+- FAISS retrieves the Top-K most similar chunks
+
+
+#### Step 3 — Reranking
+
+Retrieved chunks are reranked based on semantic relevance to improve answer quality.
+
+
+#### Step 4 — Grounded Generation
+
+The top reranked chunks are sent to the LLM, which generates an answer grounded only in the retrieved context.
+
+
+#### Step 5 — Citations
+
+The system returns:
+- Final answer
+- Whether the answer is grounded
+- Citations (document, page, snippet)
+- Retrieved chunks
+- Latency metrics
+
+
+### Running the App
+
+Run the following command from the `llm-systems` root folder:
+
+```
+streamlit run projects/doc_query/app/app.py
+```
+
+## Core Capabilities Demonstrated
+
+This project demonstrates the ability to build production-style LLM systems, not just prototypes.
+
+Key engineering concepts demonstrated:
+- Retrieval-Augmented Generation (RAG)
+- Vector databases
+- Semantic search
+- Reranking pipelines
+- Grounded LLM generation
+- API design for LLM systems
+- End-to-end AI application architecture
+
+This type of system is commonly used in:
+- Enterprise knowledge assistants
+- Legal document analysis
+- Customer support automation
+- AI search systems
+- Internal company documentation Q&A
+
+
+### Tech Stack
+| Component    | Technology                               |
+| ------------ | ---------------------------------------- |
+| LLM          | Gemini 2.5 Flash                         |
+| Embeddings   | Gemini embedding-001                     |
+| Vector Store | FAISS                                    |
+| Backend API  | FastAPI                                  |
+| Frontend UI  | Streamlit                                |
+| Language     | Python                                   |
+| Logging      | Structured logging with latency tracking |
+
