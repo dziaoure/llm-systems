@@ -65,7 +65,7 @@ if mode == 'PDF':
         
         from projects.contract_analyzer.core.analyze import analyze_contract_pdf
 
-        with st.spinner('Extracting and analyzinng PDF...'):
+        with st.spinner('Extracting and analyzing PDF...'):
             result = analyze_contract_pdf(
                 pdf_bytes=pdf_bytes,
                 max_pages=MAX_PAGES,
