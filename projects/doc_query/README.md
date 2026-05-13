@@ -160,7 +160,7 @@ GEMINI_API_KEY='your_api_key_here'
 Run the following command from the `llm-systems` root folder:
 
 ```
-streamlit run projects/doc_query/app/app.py
+python -m streamlit run projects/doc_query/app/app.py
 ```
 
 ## Example Questions
