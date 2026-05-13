@@ -177,7 +177,7 @@ The system returns:
 Run the following command from the `llm-systems` root folder:
 
 ```
-streamlit run projects/doc_query/app/app.py
+python -m streamlit run projects/doc_query/app/app.py
 ```
 
 ## Core Capabilities Demonstrated
