@@ -60,7 +60,7 @@ Each system is built to reflect how LLM-powered applications should behave in pr
 Run the following command from the `llm-systems` root folder:
 
 ```
-streamlit run projects/contract_analyzer/app/main.py
+python -m streamlit run projects/contract_analyzer/app/main.py
 ```
 
 #### FastAPI (API)

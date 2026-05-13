@@ -131,7 +131,7 @@ GEMINI_API_KEY='your_api_key_here'
 Run the following command from the `llm-systems` root folder:
 
 ```
-streamlit run projects/contract_analyzer/app/main.py
+python -m streamlit run projects/contract_analyzer/app/main.py
 ```
 
 ### FastAPI (API)
